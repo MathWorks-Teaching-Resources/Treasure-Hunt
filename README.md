@@ -23,7 +23,7 @@ This module assumes familiarity with basic mathematics at a middle school level.
 
 ## Details ##
 
-(https://user-images.githubusercontent.com/113918546/212431378-1ffe41e1-06f7-4d57-adf3-b6d600c12b7d.gif)
+![GIF showing treasure hunt game being played](https://user-images.githubusercontent.com/113918546/212431378-1ffe41e1-06f7-4d57-adf3-b6d600c12b7d.gif)
 
 **treasureHuntLearn.mlx** [Open in MATLAB Online](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Treasure-Hunt&project=TreasureHunt.prj&file=treasureHuntLearn.mlx)
 This script walks the learner through the necessary steps to build the treasure hunting game, while teaching the relevant computer science concepts along the way.
