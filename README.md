@@ -46,16 +46,16 @@ This script contains the solutions for the treasureHuntPlay.mlx script.
 ## ##
 
 **Learning Goals**
--Recognize and use variables
--Recognize and use MATLAB built-in functions
--Recognize, interpret, and respond to messages about syntax errors
--Recognize and interpret comments in code
--Use documentation and search to learn more about how to use a programming language
--Recognize and explain the importance of attention to detail when coding
--Use live controls to enhance code
--Use and manipulate matrices
--Recognize and use conditional statements
--Create and use created functions
+- Recognize and use variables
+- Recognize and use MATLAB built-in functions
+- Recognize, interpret, and respond to messages about syntax errors
+- Recognize and interpret comments in code
+- Use documentation and search to learn more about how to use a programming language
+- Recognize and explain the importance of attention to detail when coding
+- Use live controls to enhance code
+- Use and manipulate matrices
+- Recognize and use conditional statements
+- Create and use created functions
 
 ## Products ##
 MATLAB&reg;
