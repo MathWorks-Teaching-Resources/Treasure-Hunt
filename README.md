@@ -1,4 +1,4 @@
-# TREASURE HUNT GAME: LEARN TO CODE [![View <File Exchange Title> on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/XXXX) or [Open in MATLAB Online](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Treasure-Hunt&project=TreasureHunt.prj)
+# TREASURE HUNT GAME: LEARN TO CODE [![View Treasure Hunt Game on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/123265-treasure-hunt) or [Open in MATLAB Online](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Treasure-Hunt&project=TreasureHunt.prj)
 
 **Curriculum Module**  
 _Created with R2022b. Compatible with R2022b and later releases._ 
