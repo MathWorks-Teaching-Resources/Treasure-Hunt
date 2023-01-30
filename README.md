@@ -63,7 +63,7 @@ This script contains the solutions for the treasureHuntPlay.mlx script.
 MATLAB&reg;
 
 ## License ##
-The license for this module is available in the [License.txt](LICENSE.txt) file in this GitHub repository.
+The license for this module is available in the License.txt file in this GitHub repository.
 
 ## Support ##
 If you would like to provide feedback or have a question, contact the <a href="mailto:onlineteaching@mathworks.com">MathWorks online teaching team</a>.
