@@ -5,10 +5,10 @@
 *.mexa64 binary
 *.mexw64 binary
 *.mexmaci64 binary
-*.mlapp binary linguist-language=MATLAB
+*.mlapp binary
 *.mldatx binary
 *.mlproj binary
-*.mlx binary merge=mlAutoMerge linguist-language=MATLAB
+*.mlx binary
 *.p binary
 *.sfx binary
 *.sldd binary
@@ -26,7 +26,3 @@
 *.pdf binary
 *.png binary
 *.xlsx binary
-
-# Ignore HTML
-
-*.html linguist-detectable=false
