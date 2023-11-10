@@ -45,23 +45,29 @@ classdef SmokeTests < matlab.unittest.TestCase
 
         function smokeTest(testCase)
             myFiles = testCase.results.Name;
-            for k = 1:length(myFiles)
-                if myFiles(k) ~= "TreasureHuntAdvanced.mlx"
+            fid = fopen(fullfile("SoftwareTests","TestResults_"+release_version+".txt"),"w");
+            fprintf(fid,"Version,File,Status,ElapsedTime\n");
+            for kTest = 1:length(myFiles)
+                if myFiles(kTest) ~= "TreasureHuntAdvanced.mlx"
                     try
-                        disp("Running " + myFiles(k))
+                        disp("Running " + myFiles(kTest))
                         tic
-                        run(myFiles(k))
-                        testCase.results.Time(k) = toc;
-                        disp("Finished " + myFiles(k))
-                        testCase.results.Passed(k) = true;
+                        run(myFiles(kTest))
+                        testCase.results.Time(kTest) = toc;
+                        disp("Finished " + myFiles(kTest))
+                        testCase.results.Passed(kTest) = true;
+                        fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"passed",testCase.results.Time(kTest));
                     catch ME
-                        testCase.results.Time(k) = toc;
-                        disp("Failed " + myFiles(k) + " because " + ...
+                        testCase.results.Time(kTest) = toc;
+                        disp("Failed " + myFiles(kTest) + " because " + ...
                             newline + ME.message)
-                        testCase.results.Message(k) = ME.message;
+                        testCase.results.Message(kTest) = ME.message;
+                        fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"failed",testCase.results.Time(kTest));
                     end
                 end
+                clearvars -except kTest testCase myFiles fid
             end
+            fclose(fid);
             struct2table(testCase.results)
         end
 
@@ -70,7 +76,8 @@ classdef SmokeTests < matlab.unittest.TestCase
     methods (TestClassTeardown)
 
         function closeAllFigure(testCase)
-            close all force
+            close all force  % Close figure windows
+            bdclose all      % Close Simulink models
         end
 
     end % methods (TestClassTeardown)
