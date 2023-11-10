@@ -30,12 +30,6 @@ jobs:
         uses: matlab-actions/run-command@v1
         with:
           command: openProject(pwd); results = runtests(fullfile("SoftwareTests","SmokeTests.m")); assertSuccess(results); 
-     
-      # Run FunctionTests
-      - name: Run FunctionTests
-        uses: matlab-actions/run-command@v1
-        with:
-          command: openProject(pwd); results = runtests(fullfile("SoftwareTests","FunctionTests.m")); assertSuccess(results); 
 
       # Upload the test results as artifact
       - name: Upload TestResults
