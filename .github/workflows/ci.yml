@@ -13,7 +13,7 @@ jobs:
     strategy: 
       fail-fast: false
       matrix:
-        MATLABVersion: [R2023a,R2023b]
+        MATLABVersion: [R2021a,R2021b,R2022a,R2022b,R2023a,R2023b]
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -30,6 +30,12 @@ jobs:
         uses: matlab-actions/run-command@v1
         with:
           command: openProject(pwd); results = runtests(fullfile("SoftwareTests","SmokeTests.m")); assertSuccess(results); 
+     
+      # Run FunctionTests
+      - name: Run FunctionTests
+        uses: matlab-actions/run-command@v1
+        with:
+          command: openProject(pwd); results = runtests(fullfile("SoftwareTests","FunctionTests.m")); assertSuccess(results); 
 
       # Upload the test results as artifact
       - name: Upload TestResults

@@ -27,7 +27,7 @@ classdef SmokeTests < matlab.unittest.TestCase
         end % function setUpPath
 
         function setUpResults(testCase)
-            files = dir(fullfile(testCase.rootProject,"Scripts","*.mlx"));
+            files = dir(fullfile(testCase.rootProject,"Solutions","*.mlx"));
             testCase.results = struct;
             testCase.results.Name = strings(size(files));
             testCase.results.Passed = false(size(files));
@@ -48,22 +48,20 @@ classdef SmokeTests < matlab.unittest.TestCase
             fid = fopen(fullfile("SoftwareTests","TestResults_"+release_version+".txt"),"w");
             fprintf(fid,"Version,File,Status,ElapsedTime\n");
             for kTest = 1:length(myFiles)
-                if myFiles(kTest) ~= "TreasureHuntAdvanced.mlx"
-                    try
-                        disp("Running " + myFiles(kTest))
-                        tic
-                        run(myFiles(kTest))
-                        testCase.results.Time(kTest) = toc;
-                        disp("Finished " + myFiles(kTest))
-                        testCase.results.Passed(kTest) = true;
-                        fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"passed",testCase.results.Time(kTest));
-                    catch ME
-                        testCase.results.Time(kTest) = toc;
-                        disp("Failed " + myFiles(kTest) + " because " + ...
-                            newline + ME.message)
-                        testCase.results.Message(kTest) = ME.message;
-                        fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"failed",testCase.results.Time(kTest));
-                    end
+                try
+                    disp("Running " + myFiles(kTest))
+                    tic
+                    run(myFiles(kTest))
+                    testCase.results.Time(kTest) = toc;
+                    disp("Finished " + myFiles(kTest))
+                    testCase.results.Passed(kTest) = true;
+                    fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"passed",testCase.results.Time(kTest));
+                catch ME
+                    testCase.results.Time(kTest) = toc;
+                    disp("Failed " + myFiles(kTest) + " because " + ...
+                        newline + ME.message)
+                    testCase.results.Message(kTest) = ME.message;
+                    fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"failed",testCase.results.Time(kTest));
                 end
                 clearvars -except kTest testCase myFiles fid
             end

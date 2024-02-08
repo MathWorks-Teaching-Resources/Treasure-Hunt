@@ -62,7 +62,7 @@ MATLAB® is used throughout.
 
 <a name="H_13206399"></a>
 ## [**TreasureHuntAdvanced.mlx**](Scripts/TreasureHuntAdvanced.mlx)
-| <img src="Images/image_4.png" width="171" alt="image_4.png"> | **In this script, students will...** <br>-  Modify the game they created in TreasureHuntPlay.mlx so that the player can input their guess by clicking on the desired square | **Academic disciplines** <br>-  Programming <br>-  Basic algebra  |
+| <img src="Images/image_4.png" width="171" alt="image_4.png"> | **In this script, students will...** <br>-  Play a new version of the game they created in TreasureHuntPlay.mlx where the player can input their guess by clicking on the desired square | **Academic disciplines** <br>-  Programming <br>-  Basic algebra  |
 | :-- | :-- | :-- |
 
 # Related Courseware Modules
