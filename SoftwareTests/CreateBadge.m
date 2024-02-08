@@ -26,4 +26,3 @@ else
 end
 Badge = jsonencode(Badge);
 writelines(Badge,fullfile("Images","TestedWith.json"));
-end
