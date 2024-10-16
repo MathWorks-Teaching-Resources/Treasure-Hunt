@@ -1,83 +1,130 @@
-% Run these tests with runMyTests
-% All tests so far are on code expected to run without errors
-% If/when we end up with a version that _should_ error, 
-% please add it to this set of examples
 classdef SmokeTests < matlab.unittest.TestCase
-    
+
     properties
-        rootProject
-        results
+        RootFolder
+    end
+    
+    properties (ClassSetupParameter)
+        Project = {currentProject()};
     end
 
+    properties (TestParameter)
+        File;
+    end
 
-     methods (TestClassSetup)
+    methods (TestParameterDefinition,Static)
 
-        function setUpPath(testCase)
+        function File = RetrieveFile(Project) %#ok<INUSD>
+            % Retrieve student template files:
+            RootFolder = currentProject().RootFolder;
+            File = dir(fullfile(RootFolder,"Scripts","*.mlx"));
+            File = {File.name}; 
+        end
+
+    end
+
+    methods (TestClassSetup)
+
+        function SetUpSmokeTest(testCase,Project) %#ok<INUSD>
+            % Navigate to project root folder:
+            testCase.RootFolder = Project.RootFolder;
+            cd(testCase.RootFolder)
             
-            try
-                project = currentProject;
-                testCase.rootProject = project.RootFolder;
-                cd(testCase.rootProject)
-            catch
-                error("Load project prior to run tests")
-            end
-            
+            % Close the StartUp app if still open:
+            delete(findall(groot,'Name','StartUp App'))
+
+            % Log MATLAB version:
             testCase.log("Running in " + version)
+        end
 
-        end % function setUpPath
-
-        function setUpResults(testCase)
-            files = dir(fullfile(testCase.rootProject,"Solutions","*.mlx"));
-            testCase.results = struct;
-            testCase.results.Name = strings(size(files));
-            testCase.results.Passed = false(size(files));
-            testCase.results.Time = zeros(size(files));
-            testCase.results.Message = strings(size(files));
-            for k = 1:length(files)
-                testCase.results.Name(k) = string(files(k).name);
-            end
-
-        end % function setUpResults
-
-    end % methods (TestClassSetup)
-
+    end
+    
     methods(Test)
 
-        function smokeTest(testCase)
-            myFiles = testCase.results.Name;
-            fid = fopen(fullfile("SoftwareTests","TestResults_"+release_version+".txt"),"w");
-            fprintf(fid,"Version,File,Status,ElapsedTime\n");
-            for kTest = 1:length(myFiles)
-                try
-                    disp("Running " + myFiles(kTest))
-                    tic
-                    run(myFiles(kTest))
-                    testCase.results.Time(kTest) = toc;
-                    disp("Finished " + myFiles(kTest))
-                    testCase.results.Passed(kTest) = true;
-                    fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"passed",testCase.results.Time(kTest));
-                catch ME
-                    testCase.results.Time(kTest) = toc;
-                    disp("Failed " + myFiles(kTest) + " because " + ...
-                        newline + ME.message)
-                    testCase.results.Message(kTest) = ME.message;
-                    fprintf(fid,"%s,%s,%s,%s\n",release_version,myFiles(kTest),"failed",testCase.results.Time(kTest));
-                end
-                clearvars -except kTest testCase myFiles fid
+        function SmokeRun(testCase,File)
+
+            % Navigate to project root folder:
+            cd(testCase.RootFolder)
+            FileToRun = string(File);
+
+            % Pre-test:
+            PreFiles = CheckPreFile(testCase,FileToRun);
+            run(PreFiles);
+
+            % Run SmokeTest
+            disp(">> Running " + FileToRun);
+            try
+                run(fullfile("Scripts",FileToRun));
+            catch ME 
+                
             end
-            fclose(fid);
-            struct2table(testCase.results)
+
+            % Post-test:
+            PostFiles = CheckPostFile(testCase,FileToRun);
+            run(PostFiles)
+
+            % Log every figure created during run:
+            Figures = findall(groot,'Type','figure');
+            Figures = flipud(Figures);
+            if ~isempty(Figures)
+                for f = 1:size(Figures,1)
+                    if ~isempty(Figures(f).Number)
+                        FigDiag = matlab.unittest.diagnostics.FigureDiagnostic(Figures(f),'Formats','png');
+                        log(testCase,1,FigDiag);
+                    end
+                end
+            end
+
+            % Close all figures and Simulink models
+            close all force
+            if any(matlab.addons.installedAddons().Name == "Simulink")
+                bdclose all
+            end
+
+            % Rethrow error if any
+            if exist("ME","var")
+                if ~any(strcmp(ME.identifier,KnownIssuesID))
+                    rethrow(ME)
+                end
+            end
+
+        end
+            
+    end
+
+
+    methods (Access = private)
+
+       function Path = CheckPreFile(testCase,Filename)
+            PreFile = "Pre"+replace(Filename,".mlx",".m");
+            PreFilePath = fullfile(testCase.RootFolder,"SoftwareTests","PreFiles",PreFile);
+            if ~isfolder(fullfile(testCase.RootFolder,"SoftwareTests/PreFiles"))
+                mkdir(fullfile(testCase.RootFolder,"SoftwareTests/PreFiles"))
+            end
+            if ~isfile(PreFilePath)
+                writelines("%  Pre-run script for "+Filename,PreFilePath)
+                writelines("% ---- Known Issues     -----",PreFilePath,'WriteMode','append');
+                writelines("KnownIssuesID = "+char(34)+char(34)+";",PreFilePath,'WriteMode','append');
+                writelines("% ---- Pre-run commands -----",PreFilePath,'WriteMode','append');
+                writelines(" ",PreFilePath,'WriteMode','append');
+            end
+            Path = PreFilePath;
+        end
+
+        function Path = CheckPostFile(testCase,Filename)
+            PostFile = "Post"+replace(Filename,".mlx",".m");
+            PostFilePath = fullfile(testCase.RootFolder,"SoftwareTests","PostFiles",PostFile);
+            if ~isfolder(fullfile(testCase.RootFolder,"SoftwareTests/PostFiles"))
+                mkdir(fullfile(testCase.RootFolder,"SoftwareTests/PostFiles"))
+            end
+            if ~isfile(PostFilePath)
+                writelines("%  Post-run script for "+Filename,PostFilePath)
+                writelines("% ---- Post-run commands -----",PostFilePath,'WriteMode','append');
+                writelines(" ",PostFilePath,'WriteMode','append');
+            end
+            Path = PostFilePath;
         end
 
     end
-
-    methods (TestClassTeardown)
-
-        function closeAllFigure(testCase)
-            close all force  % Close figure windows
-            bdclose all      % Close Simulink models
-        end
-
-    end % methods (TestClassTeardown)
 
 end
